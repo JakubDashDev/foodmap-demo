@@ -31,4 +31,4 @@ echo "==> Building and starting the stack"
 docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
 
 echo "==> Done. Tailing logs (Ctrl-C to stop watching — the stack keeps running):"
-docker compose -f docker-compose.prod.yml logs -f --tail=50
+docker compose --env-file .env.production -f docker-compose.prod.yml logs -f --tail=50
