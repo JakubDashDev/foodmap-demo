@@ -6,6 +6,7 @@ import {
   HiOutlineHome,
   HiOutlineMapPin,
   HiOutlineUserGroup,
+  HiXMark,
 } from 'react-icons/hi2'
 
 import { Logo } from '@/components/common/Logo'
@@ -21,13 +22,28 @@ const NAV_ITEMS = [
   { to: '/automations', label: 'Automations', icon: HiOutlineBolt, disabled: true },
 ]
 
-export function Sidebar() {
+export interface SidebarProps {
+  onClose?: () => void
+}
+
+export function Sidebar({ onClose }: SidebarProps) {
   const [logout] = useLogoutMutation()
 
   return (
-    <aside className="flex h-dvh w-80 shrink-0 flex-col border-r border-gray-200 bg-white">
-      <div className="flex justify-center px-6 py-8">
+    <aside className="flex h-dvh w-full shrink-0 flex-col border-r border-gray-200 bg-white">
+      <div className="relative flex items-center justify-center px-6 py-8">
         <Logo size="md" />
+
+        {onClose ? (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="absolute top-1/2 right-4 -translate-y-1/2 rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 md:hidden"
+          >
+            <HiXMark className="size-5" />
+          </button>
+        ) : null}
       </div>
 
       <nav className="flex-1 space-y-3 px-4">
