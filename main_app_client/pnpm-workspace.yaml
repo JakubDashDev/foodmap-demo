@@ -1,0 +1,5 @@
+packages:
+  - '.'
+
+overrides:
+  immer: 11.1.16

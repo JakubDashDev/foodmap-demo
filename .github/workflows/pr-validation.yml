@@ -1,0 +1,110 @@
+name: PR Validation
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Find changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      dashboard: ${{ steps.filter.outputs.dashboard }}
+      rails: ${{ steps.filter.outputs.rails }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            client:
+              - 'main_app_client/**'
+            dashboard:
+              - 'main_app_dashboard/**'
+            rails:
+              - 'main_app_rails/**'
+              
+  lint-client:
+    name: Lint & format (client)
+    needs: changes
+    if: needs.changes.outputs.client == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: main_app_client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: main_app_client/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format
+
+  lint-dashboard:
+    name: Lint & format (dashboard)
+    needs: changes
+    if: needs.changes.outputs.dashboard == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: main_app_dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: main_app_dashboard/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format
+
+  rails-specs:
+    name: RSpec (rails)
+    needs: changes
+    if: needs.changes.outputs.rails == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: main_app_rails
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: appuser
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+    env:
+      RAILS_ENV: test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USERNAME: appuser
+      DB_PASSWORD: password
+      JWT_SECRET_KEY: ci-only-throwaway-secret-not-used-in-production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+          working-directory: main_app_rails
+      - run: bin/rails db:create db:schema:load
+      - run: bundle exec rspec

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 150" width="100%" height="100%">
+  <style>
+    .logo-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 85px;
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+  </style>
+
+  <!-- Logo Text -->
+  <text x="20" y="100" class="logo-text">
+    <tspan fill="#e8623d">Food</tspan><tspan fill="#f9fafb">Map</tspan>
+  </text>
+
+  <!-- Poland Flag (Tilted slightly to mimic an emoji/dynamic feel) -->
+  <g transform="translate(365, 80) rotate(-4)">
+    <!-- White top half with a slight border for visibility on white backgrounds -->
+    <rect x="0" y="0" width="48" height="30" rx="4" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+    
+    <!-- Red bottom half (#dc143c is standard flag red) -->
+    <path d="M 0 15 L 48 15 L 48 26 C 48 28.2 46.2 30 44 30 L 4 30 C 1.8 30 0 28.2 0 26 Z" fill="#dc143c"/>
+  </g>
+</svg>

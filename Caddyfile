@@ -1,0 +1,37 @@
+# Two sites, each serving its own frontend build and proxying its matching
+# API prefix to Rails — the same split main_app_client/main_app_dashboard use
+# in development via the Vite proxy (see each app's vite.config.ts). Because
+# each frontend only ever calls its own origin, there's no CORS to configure.
+#
+# DOMAIN and ADMIN_DOMAIN come from the environment (see .env.production.example).
+# Caddy issues and renews Let's Encrypt certificates for both automatically —
+# nothing else to set up, as long as ports 80/443 are reachable from the internet
+# and DNS for both names points here.
+
+{$DOMAIN} {
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy rails:3200
+	}
+
+	handle {
+		root * /srv/client
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+{$ADMIN_DOMAIN} {
+	encode gzip
+
+	handle /dashboard/* {
+		reverse_proxy rails:3200
+	}
+
+	handle {
+		root * /srv/dashboard
+		try_files {path} /index.html
+		file_server
+	}
+}

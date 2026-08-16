@@ -1,0 +1,19 @@
+FROM ruby:3.2.11
+
+RUN apt-get update -qq && \
+    apt-get install -y build-essential libpq-dev curl vim ca-certificates && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir /app
+WORKDIR /app
+
+RUN gem install bundler -v 2.5.17
+
+COPY ./Gemfile ./
+COPY ./Gemfile.lock ./
+
+RUN bundle install
+
+COPY . /app
+

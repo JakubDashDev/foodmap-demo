@@ -1,0 +1,63 @@
+services:
+  main_app_client:
+    container_name: main_app_client
+    build:
+      context: ./main_app_client
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./main_app_client:/app
+      - /app/node_modules
+    command: pnpm dev
+    depends_on:
+      - main_app_rails
+  main_app_dashboard:
+    container_name: main_app_dashboard
+    build:
+      context: ./main_app_dashboard
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3100:3100"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./main_app_dashboard:/app
+      - /app/node_modules
+    command: pnpm dev
+    depends_on:
+      - main_app_rails      
+  main_app_rails:
+    container_name: main_app_rails
+    build:
+      context: ./main_app_rails
+      dockerfile: Dockerfile.dev
+    command: bash -c "bundle exec rails db:prepare && bundle exec rails s -b '0.0.0.0' -p 3200"
+    ports:
+      - "3200:3200"
+    env_file:
+      - main_app_rails/.env
+    environment:
+      - RAILS_ENV=development
+      - DB_HOST=main_app_database
+      - DB_PORT=5432
+      - DB_USERNAME=appuser
+      - DB_PASSWORD=password
+    volumes:
+      - ./main_app_rails:/app
+    depends_on:
+      - main_app_database
+  main_app_database:
+    container_name: main_app_database
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    volumes:
+      - main_app_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  main_app_postgres_data:

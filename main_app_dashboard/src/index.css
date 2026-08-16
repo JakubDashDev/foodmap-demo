@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --color-primary-50: #fdf3f0;
+  --color-primary-100: #fbe1d8;
+  --color-primary-200: #f5c0ac;
+  --color-primary-300: #ee9975;
+  --color-primary-400: #ea7c54;
+  --color-primary-500: #e8623d;
+  --color-primary-600: #d14f2b;
+  --color-primary-700: #ad3e21;
+  --color-primary-800: #8a311b;
+  --color-primary-900: #6f2817;
+}
+
+body {
+  font-family: var(--font-sans);
+}
