@@ -56,7 +56,7 @@ export function LoginForm() {
       <div>
         <Typography variant="h2">Sign in</Typography>
         <Typography variant="body2" className="mt-1 text-gray-500">
-          This is a public demo. Credentials are filled, just sign in.
+          This is a public demo — credentials are pre-filled, just hit Sign in.
         </Typography>
       </div>
 
