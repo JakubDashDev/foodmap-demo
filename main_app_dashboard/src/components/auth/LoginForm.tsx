@@ -14,6 +14,13 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
+// This is a public demo of the dashboard — the credentials are pre-filled
+// on purpose so a visitor without an account can still see it working.
+const DEMO_CREDENTIALS: LoginFormValues = {
+  email: 'demo@foodmap.app',
+  password: 'FoodmapDemo2026!',
+}
+
 export function LoginForm() {
   const navigate = useNavigate()
   const [login, { isLoading, error }] = useLoginMutation()
@@ -23,7 +30,7 @@ export function LoginForm() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<LoginFormValues>()
+  } = useForm<LoginFormValues>({ defaultValues: DEMO_CREDENTIALS })
 
   async function onSubmit(values: LoginFormValues) {
     const result = loginSchema.safeParse(values)
@@ -49,7 +56,7 @@ export function LoginForm() {
       <div>
         <Typography variant="h2">Sign in</Typography>
         <Typography variant="body2" className="mt-1 text-gray-500">
-          Welcome back to the admin dashboard.
+          This is a public demo — credentials are pre-filled, just hit Sign in.
         </Typography>
       </div>
 
