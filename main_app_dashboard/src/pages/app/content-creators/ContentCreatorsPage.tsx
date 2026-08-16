@@ -13,7 +13,7 @@ import { useContentCreatorsQuery } from '@/features/content-creators/api'
 import { useQueryParam } from '@/hooks/useQueryParam'
 
 export function ContentCreatorsPage() {
-  const [search, setSearch] = useQueryParam('search', '')
+  const [search, setSearch] = useQueryParam<string>('search', '')
   const [sort, setSort] = useQueryParam<ContentCreatorSortOption>('sort', 'name-asc')
   const [page, setPage] = useState(1)
   const [contentCreators, setContentCreators] = useState<ContentCreator[]>([])

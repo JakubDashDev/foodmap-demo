@@ -13,7 +13,7 @@ import { useLocationsQuery } from '@/features/locations/api'
 import { useQueryParam } from '@/hooks/useQueryParam'
 
 export function LocationsPage() {
-  const [search, setSearch] = useQueryParam('search', '')
+  const [search, setSearch] = useQueryParam<string>('search', '')
   const [sort, setSort] = useQueryParam<LocationSortOption>('sort', 'name-asc')
   const [page, setPage] = useState(1)
   const [locations, setLocations] = useState<Location[]>([])

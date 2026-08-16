@@ -13,7 +13,7 @@ import { useReviewsQuery } from '@/features/reviews/api'
 import { useQueryParam } from '@/hooks/useQueryParam'
 
 export function ReviewsPage() {
-  const [search, setSearch] = useQueryParam('search', '')
+  const [search, setSearch] = useQueryParam<string>('search', '')
   const [sort, setSort] = useQueryParam<ReviewSortOption>('sort', 'published_at-desc')
   const [page, setPage] = useState(1)
   const [reviews, setReviews] = useState<Review[]>([])
